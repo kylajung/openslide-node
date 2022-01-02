@@ -1,12 +1,13 @@
-const HelloWorld = require("../lib/binding.js");
+const openslide = require("../lib/binding.js");
 const assert = require("assert");
 
-assert(HelloWorld, "The expected function is undefined");
+assert(openslide, "The expected function is undefined");
 
 function testBasic()
 {
-    const result =  HelloWorld("hello");
-    assert.strictEqual(result, "world", "Unexpected value returned");
+    const wsiPath = "test/wsi/CMU-1-Small-Region.svs";
+    const wsi = openslide.open(wsiPath);
+    const tile = openslide.readRegion(wsi, 0, 0, 0, 1000, 1000);
 }
 
 assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");
