@@ -1,16 +1,31 @@
 {
-  "main": "lib/binding.js",
-  "private": true,
+  "name": "openslide-node",
+  "version": "1.0.0-beta",
+  "author": "kylajung",
+  "bugs": {
+    "url": "https://github.com/kylajung/openslide-node/issues"
+  },
   "dependencies": {
-    "node-addon-api": "^1.1.0"
+    "bindings": "^1.5.0",
+    "node-addon-api": "^4.2.0"
+  },
+  "description": "Node.js binding to openslide library",
+  "gypfile": true,
+  "keywords": [
+    "openslide",
+    "wsi",
+    "whole-slide-imaging",
+    "nodejs"
+  ],
+  "license": "MIT",
+  "main": "./lib/binding.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylajung/openslide-node.git"
   },
   "scripts": {
-    "test": "node --napi-modules ./test/test_binding.js"
+    "test": "node --napi-modules ./test/test_binding.js",
+    "install": "node-gyp rebuild"
   },
-  "gypfile": true,
-  "name": "hello-world",
-  "version": "1.0.0",
-  "description": "A first project.",
-  "author": "Your name goes here",
-  "license": "ISC"
+  "homepage": "https://github.com/kylajung/openslide-node"
 }
