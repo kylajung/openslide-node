@@ -47,14 +47,16 @@ Napi::Value ReadRegion(const Napi::CallbackInfo& info) {
   int32_t level = info[3].As<Napi::Number>().Int32Value();
   int64_t x = info[1].As<Napi::Number>().Int64Value();
   int64_t y = info[2].As<Napi::Number>().Int64Value();
-  int64_t w = info[4].As<Napi::Number>().Int64Value();
-  int64_t h = info[5].As<Napi::Number>().Int64Value();
+  int64_t width = info[4].As<Napi::Number>().Int64Value();
+  int64_t height = info[5].As<Napi::Number>().Int64Value();
 
-  uint32_t *buf = static_cast<uint32_t*>(g_malloc(w * h * 4));
+  int64_t buffer_size = width * height * 4;
+
+  uint32_t *buf = static_cast<uint32_t*>(g_malloc(buffer_size));
   // TODO: add error handling for openslide_read_region
-  openslide_read_region(osr, buf, x, y, level, w, h);
-  
+  openslide_read_region(osr, buf, x, y, level, width, height);
+
   Napi::Buffer<uint32_t> data = Napi::Buffer<uint32_t>::New(env, buf,
-    w * h * 4, FreeBuffer);
+                                                            buffer_size, FreeBuffer);
   return data;
 }

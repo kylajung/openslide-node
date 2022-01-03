@@ -25,7 +25,7 @@
           },
         }],
       ],
-      "sources": [ "src/nodeopenslide.cc", "src/methods.cc" ],
+      "sources": [ "src/nodeopenslide.cc", "src/methods.cc", "src/async.cc"],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "/opt/homebrew/Cellar/openslide/3.4.1_5/include",
