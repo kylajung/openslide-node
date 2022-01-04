@@ -39,11 +39,11 @@ class ReadRegionWorker : public Napi::AsyncWorker {
   uint32_t *tile;
 };
 
-Napi::Value ReadRegionAsync(const Napi::CallbackInfo& info) {
+Napi::Value ReadRegion(const Napi::CallbackInfo& info) {
   openslide_t *osr = info[0].As<Napi::External<openslide_t>>().Data();
-  int32_t level = info[3].As<Napi::Number>().Int32Value();
   int64_t x = info[1].As<Napi::Number>().Int64Value();
   int64_t y = info[2].As<Napi::Number>().Int64Value();
+  int32_t level = info[3].As<Napi::Number>().Int32Value();
   int64_t width = info[4].As<Napi::Number>().Int64Value();
   int64_t height = info[5].As<Napi::Number>().Int64Value();
   Napi::Function callback = info[6].As<Napi::Function>();

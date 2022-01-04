@@ -40,13 +40,14 @@ auto FreeBuffer = [](void* T, void* data){
   g_free(data);
 };
 
-Napi::Value ReadRegion(const Napi::CallbackInfo& info) {
+Napi::Value ReadRegionSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   openslide_t *osr = info[0].As<Napi::External<openslide_t>>().Data();
-  int32_t level = info[3].As<Napi::Number>().Int32Value();
+  
   int64_t x = info[1].As<Napi::Number>().Int64Value();
   int64_t y = info[2].As<Napi::Number>().Int64Value();
+  int32_t level = info[3].As<Napi::Number>().Int32Value();
   int64_t width = info[4].As<Napi::Number>().Int64Value();
   int64_t height = info[5].As<Napi::Number>().Int64Value();
 

@@ -3,6 +3,6 @@
 
 #include <napi.h>
 
-Napi::Value ReadRegionAsync(const Napi::CallbackInfo& info);
+Napi::Value ReadRegion(const Napi::CallbackInfo& info);
 
 #endif // SRC_ASYNC_H_
