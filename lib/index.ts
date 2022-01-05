@@ -7,7 +7,7 @@ type ReadRegionCallback = (err: Error, tile: Buffer) => void;
  * An instance of this class reprensents a single WSI file.
  * Note that the underlying file descriptor will be automatically closed when the object is garbage collected.
  */
-class OpenSlide {
+export class OpenSlide {
     private _osr: any; // object that holds openslide_t passed from addon
     /**
      * open WSI file
@@ -58,5 +58,3 @@ class OpenSlide {
         }
     }
 }
-
-module.exports = OpenSlide;
