@@ -2,6 +2,9 @@ const openslide = require("bindings")("nodeopenslide");
 
 type ReadRegionCallback = (err: Error, tile: Buffer) => void;
 
+enum ErrorMsg {
+    NEGATIVE_WIDTH_HEIGHT = "negative width or negative height is not allowed"
+}
 /**
  * Class for opening, reading openslide-supported WSI files.
  * An instance of this class reprensents a single WSI file.
@@ -29,6 +32,10 @@ export class OpenSlide {
      * @returns A buffer representing uncompressed RGBA image. The size of Buffer is width * height * 4 bytes.
      */
     readRegionSync(x: number, y: number, level: number, width: number, height: number): Buffer {
+        if (width < 0 || height < 0) {
+            throw new Error(ErrorMsg.NEGATIVE_WIDTH_HEIGHT);
+        }
+
         const tile = openslide.readRegionSync(this._osr, x, y, level, width, height);
         return tile;
     }
@@ -46,11 +53,19 @@ export class OpenSlide {
     readRegion(x: number, y: number, level: number, width: number, height: number, callback: ReadRegionCallback): void;
     readRegion(x: number, y: number, level: number, width: number, height: number): Promise<Buffer>;
     readRegion(x: number, y: number, level: number, width: number, height: number, callback?: ReadRegionCallback): Promise<Buffer> | void {
+        const _readRegion = (callback: Function) =>  {
+            if (width < 0 || height < 0) {
+                callback(new Error(ErrorMsg.NEGATIVE_WIDTH_HEIGHT))
+            } else {
+                openslide.readRegion(this._osr, x, y, level, width, height, callback);
+            }
+        }
+
         if (typeof callback === "function") {
-            openslide.readRegion(this._osr, x, y, level, width, height, callback);
+            _readRegion(callback);
         } else {
             return new Promise((resolve, reject) => {
-                openslide.readRegion(this._osr, x, y, level, width, height, (err: Error, tile: Buffer) => {
+                _readRegion((err: Error, tile: Buffer) => {
                     if (err) reject(err);
                     else resolve(tile);
                 });

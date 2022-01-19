@@ -22,6 +22,14 @@ describe("OpenSlide class", () => {
                 wsi.readRegionSync(0, 0, 0, 1000, 1000);
             }).not.toThrow();
         });
+        test("should reject negative height or width", () => {
+            expect(() => {
+                wsi.readRegionSync(0, 0, 0, -1000, 1000);
+            }).toThrow();
+            expect(() => {
+                wsi.readRegionSync(0, 0, 0, 1000, -1000);
+            }).toThrow();
+        });
     });
 
     describe("readRegion method", () => {
@@ -29,6 +37,16 @@ describe("OpenSlide class", () => {
             wsi.readRegion(0, 0, 0, 1000, 1000, (err, tile) => {
                 expect(err).toBe(undefined);
                 expect(tile).toBeInstanceOf(Buffer);
+            });
+        });
+        test("should reject negative height or width", async () => {
+            wsi.readRegion(0, 0, 0, -1000, 1000, (err, tile) => {
+                expect(err).toBeInstanceOf(Error);
+                expect(tile).toBe(undefined);
+            });
+            wsi.readRegion(0, 0, 0, 1000, -1000, (err, tile) => {
+                expect(err).toBeInstanceOf(Error);
+                expect(tile).toBe(undefined);
             });
         });
     });
