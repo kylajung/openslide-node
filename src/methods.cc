@@ -28,6 +28,7 @@ Napi::Value Open(const Napi::CallbackInfo& info) {
   }
   if (openslide_get_error(osr) != NULL) {
     // File is recognized but an error occurred
+    openslide_close(osr);
     Napi::Error::New(env, "Error occured while opening file")
       .ThrowAsJavaScriptException();
     return env.Undefined();
@@ -54,8 +55,13 @@ Napi::Value ReadRegionSync(const Napi::CallbackInfo& info) {
   int64_t buffer_size = width * height * 4;
 
   uint32_t *buf = static_cast<uint32_t*>(g_malloc(buffer_size));
-  // TODO: add error handling for openslide_read_region
   openslide_read_region(osr, buf, x, y, level, width, height);
+  if (openslide_get_error(osr) != NULL) {
+    g_free(buf);
+    Napi::Error::New(env, openslide_get_error(osr))
+      .ThrowAsJavaScriptException();
+    return env.Undefined();
+  }
 
   Napi::Buffer<uint32_t> data = Napi::Buffer<uint32_t>::New(env, buf,
                                                             buffer_size, FreeBuffer);

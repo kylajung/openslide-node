@@ -18,12 +18,16 @@ class ReadRegionWorker : public Napi::AsyncWorker {
     tile = static_cast<uint32_t*>(g_malloc(buffer_size));
     // TODO: add error handling for openslide_read_region
     openslide_read_region(osr, tile, x, y, level, width, height);
+    if (openslide_get_error(osr) != NULL) {
+      g_free(tile);
+      SetError(openslide_get_error(osr));
+    }
   }
 
   void OnOK() {
     Napi::Env env = Env();
     // TODO: add error handling for openslide_read_region
-    Callback().Call({env.Undefined(),
+    Callback().Call({env.Null(),
                      Napi::Buffer<uint32_t>::New(env, tile, buffer_size, FreeBuffer)});
               
   }

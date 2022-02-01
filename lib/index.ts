@@ -1,6 +1,6 @@
 const openslide = require("bindings")("nodeopenslide");
 
-type ReadRegionCallback = (err: Error, tile: Buffer) => void;
+type ReadRegionCallback = (err: Error | null, tile: Buffer | undefined) => void;
 
 enum ErrorMsg {
     NEGATIVE_WIDTH_HEIGHT = "negative width or negative height is not allowed"
